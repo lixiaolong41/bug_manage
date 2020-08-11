@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% block main %}
+ <div class="project-nav">
+<div class="logo">
+</div>
+<div class="project_name">个人资料</div>
+<div class="logout">
+<ul>
+</ul>
+</div>
+</div>
+<div class="main">
+<div class="project-info-Div">
+<div class="project-info-title">
+<i class="layui-icon" style="font-size: 30px; color: #01AAED;font-weight:bold;"></i>个人资料
+</div>
+<div class="project-info-body">
+<form class="layui-form" id="memberForm">
+<div class="layui-form-item">
+<label class="layui-form-label">头像</label>
+<div class="layui-input-inline" style="width: 500px;">
+
+<img id="LAY_demo_upload" alt="" src="{% static 'images/touxiang.jpg' %}" style="height: 80px;width: 80px;border:1px solid #d2d2d2;border-radius: 100%;">
+  <div class="layui-upload-list">
+    <img class="layui-upload-img" id="demo1">
+    <p id="demoText"></p>
+  </div>
+</div>
+<div class="layui-form-item">
+<label class="layui-form-label">邮箱</label>
+<div class="layui-input-inline" style="width: 500px;">
+<input style="background-color: #f2f2f2;" name="email" autocomplete="off" value="416281007@qq.com" placeholder="请输入邮箱" readonly="readonly" class="layui-input" type="text">
+</div>
+</div>
+<div class="layui-form-item">
+<label class="layui-form-label">手机号</label>
+<div class="layui-input-inline" style="width: 500px;">
+<input name="mobile" lay-verify="" autocomplete="off" value="" placeholder="请输入手机号" class="layui-input" type="text">
+</div>
+</div>
+<div class="layui-form-item">
+<label class="layui-form-label">昵称</label>
+<div class="layui-input-inline" style="width: 500px;">
+<input name="uname" required="" lay-verify="required" autocomplete="off" value="李小龙" placeholder="请输入昵称" class="layui-input" type="text" maxlength="10">
+</div>
+</div>
+<div class="layui-form-item">
+</div>
+<div class="layui-form-item">
+<div class="layui-input-block">
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block left %}
+<li class="layui-nav-item"><a href="/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;项目列表</a></li>
+<li class="layui-nav-item"><a href="/todo_list/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;待办事项</a><span class="msg_num" style="display: none;">0</span></li>
+<li class="layui-nav-item layui-this"><a href="/personal_data/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;个人资料</a></li>
+{% endblock %}
+{% block button %}
+{% endblock %}

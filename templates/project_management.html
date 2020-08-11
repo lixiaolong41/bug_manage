@@ -1,0 +1,92 @@
+{% extends "index.html" %}
+{% block head %}
+     <li class="layui-nav-item">
+<a href="/project/overview?project_id={{ pro_id }}">项目概括</a>
+</li>
+
+<li class="layui-nav-item">
+<a href="/project/assign_for_me?project_id={{ pro_id }}">分配给我</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/my_create?project_id={{ pro_id }}">我创建的</a>
+</li>
+<li class="layui-nav-item">
+<a href="/project/bugs_all?project_id={{ pro_id }}">所有bug</a>
+</li>
+<li class="layui-nav-item layui-this">
+<a href="/project/project_info.html?project_id={{ pro_id }}">项目管理</a>
+</li>
+{% endblock %}
+{% block main %}
+<div class="main">
+<div class="project-info-Div">
+<div class="project-info-title">
+<i class="layui-icon" style="font-size: 30px; color: red;font-weight:bold;"></i>项目信息
+</div>
+<div class="project-info-body">
+<form class="layui-form" id="newBugForm">
+<div class="layui-form-item">
+<label class="layui-form-label">项目名称</label>
+<div class="layui-input-inline" style="width: 400px;">
+<input name="bug_title" required="" lay-verify="required" autocomplete="off" value="安全" placeholder="请输入项目名称" class="layui-input" type="text" disabled="disabled">
+</div>
+</div>
+
+<div class="layui-form-item">
+<div class="layui-input-block">
+
+</div>
+</div>
+</form>
+</div>
+</div>
+<div class="versionDiv">
+<div class="version_title">
+</div>
+<div class="version_tbody">
+<table style="width: 100%;">
+<thead>
+<tr>
+<th style="min-width: 250px;text-align: left;width: 70%;">版本名称</th>
+<th style="width: 30%;">操作</th>
+</tr>
+</thead>
+<tbody>
+{% for e in edition %}
+<tr>
+<td>{{ e.edition }}</td>
+<td style="text-align: center;">
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+<div class="versionDiv">
+<div class="version_title">
+</div>
+<div class="version_tbody">
+<table style="width: 100%;">
+<thead>
+<tr>
+<th style="min-width: 250px;text-align: left;width: 70%;">模块名称</th>
+<th style="width: 30%;">操作</th>
+</tr>
+</thead>
+<tbody>
+{% for m in modular %}
+<tr>
+<td>{{ m.modular }}</td>
+<td style="text-align: center;">
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block button %}
+{% endblock %}

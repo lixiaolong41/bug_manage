@@ -1,0 +1,416 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0055)http://www.hibug.cn/project/newbug.html?project_id=5393 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% load staticfiles %}
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Hibug-简单易用bug系统</title>
+<meta name="baidu-site-verification" content="TKvNICuEDE">
+<link rel="shortcut icon" type="image/x-icon" href="http://www.hibug.cn/themes/ebugs/images/favicon.ico" media="screen">
+<script src="{% static 'js/hm.js' %}"></script>
+<link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+<script src="{% static 'layui/layui.js' %}" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/chosen.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}">
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.form-3.51.js' %}"></script>
+<script src="{% static 'js/chosen.jquery.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'ckeditor5/ckeditor.js' %}"></script><style>.cke{visibility:hidden;}</style>
+<body>
+<style>
+
+.datagrid-header-row, .datagrid-row {
+	height: 35px;
+}
+.datagrid-header-row td, .datagrid-row td{
+	/* border-right: 1px solid #e2e2e2; */
+}
+.datagrid-body td, .datagrid-footer td {
+    font-size: 14px;
+}
+
+</style>
+<script>
+
+$(function(){
+})
+
+//时间公共getFormatDateByLong(value, "yyyy-MM-dd")
+Date.prototype.format = function (format) {
+    var o = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "h+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S": this.getMilliseconds()
+    };
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+};
+function getFormatDateByLong(l, pattern) {
+    return getFormatDate(new Date(l*1000), pattern);
+}
+
+function getFormatDate(date, pattern) {
+    if (date == undefined) {
+        date = new Date();
+    }
+    if (pattern == undefined) {
+        pattern = "yyyy-MM-dd hh:mm:ss";
+    }
+    return date.format(pattern);
+}
+</script>
+
+<div id="leftMenu">
+<div class="left-head">
+<div class="left-head-info">
+<a href="http://hibug.cn/"><img class="info-logo" alt="" src="./Hibug-简单易用bug系统_files/hibug-logo3.png"></a><br>
+<img style="height: 80px;width: 80px;border:1px solid #d2d2d2;border-radius: 100%;" class="info-img" alt="" src="./Hibug-简单易用bug系统_files/48579298.jpg">
+</div>
+</div>
+<div class="left-body">
+<ul class="layui-nav layui-nav-tree">
+<li class="layui-nav-item"><a href="/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;项目列表</a></li>
+<li class="layui-nav-item layui-this"><a href="/todo_list/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;待办事项</a><span class="msg_num" style="display: none;">0</span></li>
+<li class="layui-nav-item "><a href="/personal_data/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;个人资料</a></li>
+<span class="layui-nav-bar" style="top: 21.5px; height: 0px; opacity: 0;"></span></ul>
+</div>
+<div class="left-footer">
+<hr>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<div id="rightContent">
+
+<div class="project-nav">
+<style>
+.logo  .chosen-container{
+	padding-top: 10px;
+	padding-left: 8px;
+}
+
+.logo  .chosen-container .chosen-single{
+	background-color: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 2px;
+    height: 38px;
+    line-height: 38px;
+}
+
+.logo .chosen-container-single .chosen-drop{
+	margin-left: 8px;
+	width: 210px;
+}
+</style>
+
+
+<div class="logo">
+</div>
+<div class="project_name">
+<ul class="layui-nav layui-inline">
+<li class="layui-nav-item ">
+<a href="/project/overview?project_id={{ pro_id }}">项目概括</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/assign_for_me?project_id={{ pro_id }}">分配给我</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/my_create?project_id={{ pro_id }}">我创建的</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/bugs_all?project_id={{ pro_id }}">所有bug</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/project_info?project_id={{ pro_id }}">项目管理</a>
+</li>
+<span class="layui-nav-bar"></span></ul>
+</div>
+<div class="logout">
+</div>
+<div class="project_div" style="display: none;">
+<div style="height: 40px;line-height: 50px;text-align: center;padding: 5px;padding-top: 8px;">
+<input type="text" name="title" placeholder="查找项目" class="layui-input">
+<i class="layui-icon" style="margin-top: -416px;position: absolute;right: 20px; top: 50%;"></i>
+</div>
+<ul>
+</ul>
+</div>
+<script>
+$(function(){
+
+	/* 提交新bug */
+	$(".newbug").click(function(){
+		location.href = "/project/add_bug?project_id={{ pro_id }}";
+	});
+
+	/* 弹出项目选择列表 */
+	$(".change-project").click(function(){
+		$(".project_div").toggle();
+	})
+
+	$(".change-project-a").click(function(){
+		var url = window.location.pathname;
+		location.href=""+url+"?project_id="+$(this).attr("projectid");
+	})
+
+	$("#rightContent .content").click(function(){
+		var flag = $(".project_div").css('display');
+		if(flag=="block"){
+			$(".project_div").css('display','none')
+		}
+	})
+});
+
+
+function projectSwitch(){
+	var url = window.location.pathname;
+	location.href=""+url+"?project_id="+$(".project_select").val();
+}
+</script> </div>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+<legend>创建新bug</legend>
+</fieldset>
+<form class="layui-form" id="newBugForm">
+  {% csrf_token %}
+  <div class="layui-form-item">
+    <label class="layui-form-label">bug标题</label>
+    <div class="layui-input-block">
+      <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" value="{{ bug_edit.title }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">版本</label>
+    <div class="layui-input-block">
+      <select name="edition" lay-filter="aihao">
+        {% for e in edition %}
+            {% if e.id == bug_edit.edition.id %}
+            <option value="{{ e.id }}" selected = "selected">{{ e.edition }}</option>
+            {% else %}
+            <option value="{{ e.id }}">{{ e.edition }}</option>
+            {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">模块</label>
+    <div class="layui-input-block">
+      <select name="modular" lay-filter="aihao">
+        {% for m in modular %}
+            {% if m.id == bug_edit.modular.id %}
+            <option value="{{ m.id }}" selected>{{ m.modular }}</option>
+            {% else %}
+            <option value="{{ m.id }}">{{ m.modular }}</option>
+            {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+   <div class="layui-form-item">
+    <label class="layui-form-label">处理人</label>
+    <div class="layui-input-block">
+      <select name="handler" lay-filter="aihao">
+        {% for u in user %}
+        {% if u.id == bug_edit.founder.id %}
+        <option value="{{ u.id }}" selected>{{ u.username }}</option>
+        {% else %}
+        <option value="{{ u.id }}">{{ u.username }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">漏洞危害级别</label>
+    <div class="layui-input-block">
+    {% if bug_edit.priority == "低危" %}
+      <input type="radio" name="priority" value="低危" title="低危" checked="">
+      <input type="radio" name="priority" value="中危" title="中危">
+      <input type="radio" name="priority" value="高危" title="高危">
+    {% elif bug_edit.priority == "中危" %}
+      <input type="radio" name="priority" value="低危" title="低危">
+      <input type="radio" name="priority" value="中危" title="中危" checked="">
+      <input type="radio" name="priority" value="高危" title="高危">
+    {% else %}
+      <input type="radio" name="priority" value="低危" title="低危">
+      <input type="radio" name="priority" value="中危" title="中危">
+      <input type="radio" name="priority" value="高危" title="高危" checked="">
+    {% endif %}
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-block">
+    {% if bug_edit.state == "未解决" %}
+      <input type="radio" name="state" value="未解决" title="未解决" checked="">
+      <input type="radio" name="state" value="已解决" title="已解决">
+    {% else %}
+      <input type="radio" name="state" value="未解决" title="未解决">
+      <input type="radio" name="state" value="已解决" title="已解决" checked="">
+    {% endif %}
+    </div>
+  </div>
+
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">描述</label>
+    <div class="layui-input-block">
+      <textarea placeholder="[步骤]
+
+[结果]
+
+[期望]"
+                class="layui-textarea" name="text">{{ bug_edit.describe }}</textarea>
+    </div>
+  </div>
+
+  <input name="pro_id" value="{{ pro_id }}" style="display: none">
+  <input name="bug_id" value="{{ bug_edit.id }}" style="display: none">
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button type="submit" class="layui-btn" lay-submit="" lay-filter="formBtn">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</div>
+
+<script>
+
+	$(function(){
+		//提示用户是否离开此页面（关闭、刷新或者点击后退等）
+		/* window.addEventListener("beforeunload", function(e) {
+            var confirmationMessage = '确定离开此页吗？本页不需要刷新或后退';
+            (e || window.event).returnValue = confirmationMessage; // Gecko and Trident
+            return confirmationMessage; // Gecko and WebKit
+        }); */
+
+		layui.use('form', function() {
+			var form = layui.form;
+
+			//监听提交
+			form.on('submit(formBtn)', function(data) {
+				$(window).off('beforeunload');
+				// 获取编辑器区域完整html代码
+
+				$(".bugFormBtn").addClass("layui-btn-disabled");
+				layer.msg('正在提交中，稍等片刻...');
+
+				var options = {
+					url : "/project/add_bug",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+                        location.href="/project/my_create?project_id={{ pro_id }}";
+					},
+					error : function(e) {
+						layer.msg("出现错误 ，请重试", {icon: 5});
+						$(".bugFormBtn").removeClass("layui-btn-disabled");
+					}
+				};
+				$("#newBugForm").ajaxSubmit(options);
+
+				return false;
+			});
+		});
+	})
+
+</script>
+<style>
+.upgrade_div{
+	width: 450px;
+	height: 290px;
+	display: none;
+}
+
+.upgrade_div .content{
+	width: auto;
+}
+
+.upgrade_div .content table{
+	width: 480px;
+}
+
+.upgrade_div .content table td{
+	border-bottom:1px solid #e2e2e2;
+	width: 30%;
+	padding: 7px;
+}
+
+.upgrade_div .content table td:first-child{
+	width: 40%;
+}
+
+
+</style>
+<div class="upgrade_div">
+<div class="content">
+<img src="./Hibug-简单易用bug系统_files/51266647.JPG" height="250px" style="padding-left: 5px;padding-top: 20px;">
+<img src="./Hibug-简单易用bug系统_files/51317163.JPG" height="250px" style="padding-top: 20px;">
+</div>
+</div>
+<script>
+	layui.use('element', function() {
+		var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+	});
+
+	$(function(){
+		$(".logout-btn").click(function(){
+			 $.ajax({
+	            type: "POST",
+	            url: "/api/ebugs/member/logout.do",
+	            dataType: "json",
+	            success: function (data) {
+	            	location.href = "/index.html";
+	            },
+	            error: function (msg) {
+	                alert(msg);
+	            }
+	         });
+		});
+	})
+
+
+</script>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</body></html>

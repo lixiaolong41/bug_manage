@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% block head %}
+    <li class="layui-nav-item">
+<a href="/project/overview?project_id={{ pro_id }}">项目概括</a>
+</li>
+
+<li class="layui-nav-item">
+<a href="/project/assign_for_me?project_id={{ pro_id }}">分配给我</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/my_create?project_id={{ pro_id }}">我创建的</a>
+</li>
+<li class="layui-nav-item layui-this">
+<a href="/project/bugs_all?project_id={{ pro_id }}">所有bug</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/project_info?project_id={{ pro_id }}">项目管理</a>
+</li>
+{% endblock %}
+{% block main %}
+<fieldset class="layui-elem-field layui-field-title" style="margin-bottom: 5px;"></fieldset>
+<div class="data-div" style="background-color: white;border: 1px solid #dddddd;">
+</div>
+<div class="table-div">
+<div id="example_wrapper" class="dataTables_wrapper no-footer"><div id="example_processing" class="dataTables_processing" style="display: none;">玩命加载中...</div><table id="example" class="display dataTable no-footer" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+<thead>
+<tr role="row"><th width="30px" class="sorting_disabled" rowspan="1" colspan="1" style="width: 30px;">编号</th><th style="width: 450px;" class="sorting_disabled" rowspan="1" colspan="1">Bug标题</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 129px;">优先级</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 99px;">状态</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 129px;">分配人</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 130px;">处理人</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 100px;">版本</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 108px;">模块</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 161px;">创建时间</th></tr>
+</thead>
+<tbody>
+{% for bug in bugs %}
+<tr role="row" class="odd"><td><lable>{{ bug.id }}</lable></td><td><a target="_blank" style="color: #1077B5;" href="/project/add_bug?bug_id={{ bug.id }}&project_id={{ pro_id }}">{{ bug.title }}</a></td><td><label class="priority-2">{{ bug.priority }}</label></td><td><lable class="status-2">{{ bug.state }}</lable></td><td>{{ bug.founder }}</td><td>{{ bug.handler }}</td><td>{{ bug.edition }}</td><td>{{ bug.modular }}</td><td>{{ bug.create_time }}</td>
+</tr>
+{% endfor %}
+</tbody></table><div class="dataTables_info" id="example_info" role="status" aria-live="polite">&nbsp;&nbsp;&nbsp;显示第 1 至 1 条结果，共 1 条</div><div class="dataTables_paginate paging_simple_numbers" id="example_paginate"><a class="paginate_button previous disabled" aria-controls="example" data-dt-idx="0" tabindex="0" id="example_previous">上页</a><span><a class="paginate_button current" aria-controls="example" data-dt-idx="1" tabindex="0">1</a></span><a class="paginate_button next disabled" aria-controls="example" data-dt-idx="2" tabindex="0" id="example_next">下页</a></div></div>
+</div>
+{% endblock %}
+{% block button %}
+<li>
+    <a href="/project/add_bug?project_id={{ pro_id }}">
+        <button class="newbug layui-btn layui-btn-radius layui-btn-normal layui-btn-small" style=""><i class="layui-icon"></i>提交新bug</button>
+    </a>
+</li>
+{% endblock %}

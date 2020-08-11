@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% block main %}
+<div class="main">
+<fieldset class="layui-elem-field layui-field-title"><legend style="color: #7b96a2;">所有待处理事项</legend></fieldset>
+<div class="table-div">
+<div id="example_wrapper" class="dataTables_wrapper no-footer"><div id="example_processing" class="dataTables_processing" style="display: none;">玩命加载中...</div><table id="example" class="display dataTable no-footer" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+<thead>
+<tr role="row"><th width="30px" class="sorting_disabled" rowspan="1" colspan="1" style="width: 30px;">编号</th><th width="60px" class="sorting_disabled" rowspan="1" colspan="1" style="width: 60px;">项目</th><th style="width: 450px;" class="sorting_disabled" rowspan="1" colspan="1">Bug标题</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 182px;">优先级</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 142px;">状态</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 143px;">版本</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 143px;">模块</th></tr>
+</thead>
+<tbody>
+    {% for do in do_list %}
+    <tr role="row" class="odd">
+        <td>
+            <lable>{{ do.id }}</lable></td><td><b>{{ do.project_name }}</b></td><td><a target="_blank" style="color: #1077B5;" href="/project/add_bug?bug_id={{ do.id }}&project_id={{ do.project_name.id }}">{{ do.title }}</a>
+        </td>
+        <td><label class="priority-1">{{ do.priority }}</label></td><td><lable class="status-2">{{ do.state }}</lable></td><td>{{ do.edition }}</td><td>{{ do.modular }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block left %}
+<li class="layui-nav-item"><a href="/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;项目列表</a></li>
+<li class="layui-nav-item layui-this"><a href="/todo_list/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;待办事项</a><span class="msg_num" style="display: none;">0</span></li>
+<li class="layui-nav-item "><a href="/personal_data/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;个人资料</a></li>
+{% endblock %}
+{% block button %}
+{% endblock %}

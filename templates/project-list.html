@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0037)http://www.hibug.cn/project-list.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{% load staticfiles %}
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>项目列表</title>
+<link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+<script src="{% static 'layui/layui.js' %}" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
+<link rel="stylesheet" href="{% static 'css/chosen.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}">
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.form-3.51.js' %}"></script>
+<script src="{% static 'js/chosen.jquery.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'js/ckeditor.js' %}"></script><style>.cke{visibility:hidden;}</style>
+</head>
+<body>
+<style>
+
+.datagrid-header-row, .datagrid-row {
+	height: 35px;
+}
+.datagrid-header-row td, .datagrid-row td{
+	/* border-right: 1px solid #e2e2e2; */
+}
+.datagrid-body td, .datagrid-footer td {
+    font-size: 14px;
+}
+
+</style>
+<script>
+
+$(function(){
+})
+
+//时间公共getFormatDateByLong(value, "yyyy-MM-dd")
+Date.prototype.format = function (format) {
+    var o = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "h+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S": this.getMilliseconds()
+    };
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+};
+function getFormatDateByLong(l, pattern) {
+    return getFormatDate(new Date(l*1000), pattern);
+}
+
+function getFormatDate(date, pattern) {
+    if (date == undefined) {
+        date = new Date();
+    }
+    if (pattern == undefined) {
+        pattern = "yyyy-MM-dd hh:mm:ss";
+    }
+    return date.format(pattern);
+}
+</script>
+
+<div id="leftMenu">
+<div class="left-head">
+<div class="left-head-info">
+<img style="height: 80px;width: 80px;border:1px solid #d2d2d2;border-radius: 100%;" class="info-img" alt="" src="{% static 'images/touxiang.jpg' %}">
+</div>
+</div>
+<div class="left-body">
+<ul class="layui-nav layui-nav-tree">
+<li class="layui-nav-item layui-this"><a href="/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;项目列表</a></li>
+<li class="layui-nav-item "><a href="/todo_list/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;待办事项</a><span class="msg_num" style="display: none;">0</span></li>
+<li class="layui-nav-item "><a href="/personal_data/"><i class="layui-icon"></i>&nbsp;&nbsp;&nbsp;个人资料</a></li>
+<span class="layui-nav-bar"></span></ul>
+</div>
+<div class="left-footer">
+<hr>
+</div>
+</div>
+<script>
+$(function(){
+	//进入页面后先查询一次
+	loadMsg();
+	//每10分钟执行一次
+	setInterval("loadMsg()",1000*60*10);
+});
+
+/* 查询待办事项总数量 */
+function loadMsg(){
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+	$.ajax({
+        type: "POST",
+        url: "/todo_list/",
+        dataType: "json",
+        success: function (data) {
+        	if(data==0){
+        			$(".msg_num").hide();
+            }else{
+        	        $(".msg_num").attr("style","");
+        			$(".msg_num").html(data);
+            }
+        },
+        error: function (msg) {
+        	layer.msg('服务器升级维护中，稍等片刻', {icon: 5});
+        }
+ 	});
+}
+
+
+</script>
+
+
+
+
+<div id="rightContent">
+<div class="project-nav">
+<div class="logo">
+所有项目
+</div>
+<div class="project_name"></div>
+<div class="logout">
+<ul>
+</ul>
+</div>
+</div>
+<div class="content">
+<div class="main">
+<fieldset class="layui-elem-field layui-field-title"><legend style="color: #7b96a2;">我加入的所有项目</legend></fieldset>
+<ul class="project-list">
+{% for pro in pro_list %}
+    {% if pro.status == 0 %}
+<li class="projects can-project" project_id="{{ pro.id }}" style="height: 290px; width: 90px">
+<div class="img" style="text-align: right;">
+<span class="file" style="display: none;">
+<a class="del-file" project_id="{{ pro.id }}"><i class="iconfont" style="color: red;">&#59051</i></a>
+</span>
+</div>
+<div class="title">
+<div class="title-text">
+<h1>{{ pro.project_name }}</h1>
+<h3>创建人：{{ pro.founder }}</h3>
+</div>
+</div>
+</li>
+    {% endif %}
+{% endfor %}
+<li class="addProject" style="height: 290px; width: 90px">
+<div class="img">
+</div>
+<div class="title">
+<div class="title-text">
+<h1 style="font-weight: bold;">添加项目</h1>
+<h3>&nbsp;</h3>
+</div>
+</div>
+</li>
+</ul>
+<fieldset class="layui-elem-field layui-field-title"><legend style="color: #7b96a2;">归档项目</legend></fieldset>
+<ul class="project-list">
+{% for pro in pro_list %}
+    {% if pro.status == 1 %}
+<li class="projects can-project" project_id="{{ pro.id }}" style="height: 290px; width: 90px">
+<div class="img" style="text-align: right;">
+</div>
+<div class="title">
+<div class="title-text">
+<h1>{{ pro.project_name }}</h1>
+<h3>创建人：{{ pro.founder }}</h3>
+</div>
+</div>
+</li>
+    {% endif %}
+{% endfor %}
+</ul>
+</div>
+</div>
+</div>
+<div class="cteate_project">
+<div class="project_img" style="width: 150px">
+</div>
+<div style="margin-left: 5px;margin-right: 7px;">
+<input type="text" class="layui-input form-control pname" placeholder="请输入项目名称">
+</div>
+</div>
+<script src="{% static 'js/minigrid.js' %}"></script>
+<script>
+
+$(function(){
+
+	//点击查看项目
+	$(".projects").click(function(){
+		var $this = $(this);
+		$(".projects").each(function(){
+			if($this.attr("project_id")==$(this).attr("project_id")){
+				location.href="/project/overview?project_id="+$(this).attr("project_id");
+			}
+		});
+	});
+
+	//显示归档按钮
+	$(".can-project,.can-project .img").mouseenter(function(){
+		$(this).find(".file").show();
+	})
+
+	$(".can-project,.can-project .img").mouseleave(function(){
+		$(this).find(".file").hide();
+  	});
+
+	//归档项目
+	$(".del-file").on("click",function(event){
+
+		var project_id = $(this).attr("project_id")
+
+		layer.confirm('确定要将此项目归档吗？', {
+			  btn: ['确定','取消'] //按钮
+			}, function(){
+
+				var data = {
+					project_id:project_id
+		        };
+
+				$.ajax({
+		            type: "POST",
+		            url: "/project/guidang/",
+		            data: data,
+		            dataType: "json",
+		            success: function (result) {
+		            	location.reload();
+		            },
+		            error: function (data) {
+		            	layer.msg("出现问题，请稍后重试.");
+		            }
+		        });
+			}, function(){
+				//取消操作
+		});
+		 event.stopPropagation();
+	});
+
+    layui.use(['layer'], function() {
+		var layer = layui.layer; //导航的hover效果、二级菜单等功能，需要依赖element模块
+	});
+	//创建项目
+	$(".addProject").click(function(){
+		layer.open({
+		  type: 1,
+		  shade: false,
+		  title: "创建项目", //不显示标题
+		  content: $('.cteate_project'), //捕获的元素
+		  btn: ['创建项目']
+		  ,yes: function(index, layero){
+			  $.ajax({
+		            type: "get",
+		            url: "/project/overview?name="+$(".pname").val(),
+		            dataType: "json",
+		            success: function (data) {
+		            	if(data){
+			            	location.href = "/project/overview?project_id="+data;
+		            	}else{
+		            		layer.msg('出现错误，请稍后重试!', {icon: 5});
+		            	}
+		            },
+		            error: function (msg) {
+		            	layer.msg('服务器升级维护中，稍等片刻', {icon: 5});
+		            }
+	         });
+		  }
+		});
+	})});
+
+
+</script>
+<style>
+.upgrade_div{
+	width: 450px;
+	height: 290px;
+	display: none;
+}
+
+.upgrade_div .content{
+	width: auto;
+}
+
+.upgrade_div .content table{
+	width: 480px;
+}
+
+.upgrade_div .content table td{
+	border-bottom:1px solid #e2e2e2;
+	width: 30%;
+	padding: 7px;
+}
+
+.upgrade_div .content table td:first-child{
+	width: 40%;
+}
+
+
+</style>
+<script>
+	layui.use('element', function() {
+		var element = layui.element(); //导航的hover效果、二级菜单等功能，需要依赖element模块
+	});
+
+	$(function(){
+		$(".logout-btn").click(function(){
+			 $.ajax({
+	            type: "POST",
+	            url: "/api/ebugs/member/logout.do",
+	            dataType: "json",
+	            success: function (data) {
+	            	location.href = "/index.html";
+	            },
+	            error: function (msg) {
+	                alert(msg);
+	            }
+	         });
+		});
+	})
+
+
+</script>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</body></html>

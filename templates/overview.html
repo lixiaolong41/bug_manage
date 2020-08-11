@@ -1,0 +1,82 @@
+{% extends "index.html" %}
+{% block head %}
+    <li class="layui-nav-item layui-this">
+<a href="/project/overview?project_id={{ pro_id }}">项目概括</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/assign_for_me?project_id={{ pro_id }}">分配给我</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/my_create?project_id={{ pro_id }}">我创建的</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/bugs_all?project_id={{ pro_id }}">所有bug</a>
+</li>
+<li class="layui-nav-item ">
+<a href="/project/project_info?project_id={{ pro_id }}">项目管理</a>
+</li>
+{% endblock %}
+{% block main %}
+<fieldset class="layui-elem-field layui-field-title" style="margin-bottom: 5px;"></fieldset>
+
+<ul class="boder">
+<li>
+<div class="box-title">
+<i class="layui-icon" style="font-size: 30px; color: red;font-weight:bold;"></i> 高危漏洞
+</div>
+<div class="box-body">
+<table style="width: 100%;">
+<thead>
+<tr>
+<th style="min-width: 250px;">标题</th>
+<th style="width: 80px;">优先级</th>
+<th style="width: 60px;">处理人</th>
+</tr>
+</thead>
+<tbody>
+{% for bug in bugs_high %}
+<tr>
+<td style="padding-right: 20px;">
+<a style="color: #1077B5;" target="_blank" href="/project/add_bug?bug_id={{ bug.id }}&project_id={{ pro_id }}">{{ bug.title }}</a>
+</td>
+<td>
+<label class="priority-2">{{ bug.priority }}</label>
+</td>
+<td>{{ bug.founder }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</li>
+<li>
+<div class="box-title">
+<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;font-weight:bold;"></i> 最新的漏洞
+</div>
+<div class="box-body">
+<table style="width: 100%;">
+<thead>
+<tr>
+<th style="min-width: 250px;">标题</th>
+<th style="width: 80px;">优先级</th>
+<th style="width: 60px;">处理人</th>
+</tr>
+</thead>
+<tbody>
+{% for bug in bugs_new %}
+<tr>
+<td style="padding-right: 20px;">
+<a style="color: #1077B5;" target="_blank" href="/project/add_bug?bug_id={{ bug.id }}&project_id={{ pro_id }}">{{ bug.title }}</a>
+</td>
+<td>
+<label class="priority-2">{{ bug.priority }}</label>
+</td>
+<td>{{ bug.founder }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</li>
+</ul>
+{% endblock %}
